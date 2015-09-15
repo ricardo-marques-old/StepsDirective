@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Testing Steps</title>
+	<style>
+		.container{
+			width:310px;
+			background:skyblue;
+			overflow:hidden;
+		}
+		step{
+			cursor:pointer;
+			position:relative;
+			padding:10px;
+			padding-top:50px; /* must be at least height of the circle */
+			text-align:center;
+			transition:all 550ms ease-in-out ;
+		}
+		my-steps{
+			display:flex;
+			justify-content:space-between;
+		}
+		.active .circle{
+			border:2px solid #BBCCBB;
+			background:#BBEEBB;
+		}
+		.circles{
+			display:inline-block;
+		}
+		.circle{
+			background:#EEE;
+			width:30px;
+			height:30px;
+			border-radius:50%;
+			box-sizing:border-box;
+			transition:all 100ms ease-in-out;
+			display:inline-block;
+		}
+		step:hover .circle{
+			background:#BBEEBB;
+			opacity:0.5;
+		}
+		.active:hover .circle{
+			opacity:1;
+		}
+		.collapsed span{;
+			display:none;
+		}
+		.collapsed{
+			width:50px;
+		}
+		my-steps{
+			padding:10px;
+		}
+
+	</style>
+</head>
+<body ng-controller="myController as ctrl">
+	<div class="container">
+		<my-steps active-step="{{ ctrl.activeStep }}">
+			<step ng-click="ctrl.updateStep(1)"><span>Step1Thisisalongone</span></step>
+			<step ng-click="ctrl.updateStep(2)"><span>Step 2</span></step>
+			<step ng-click="ctrl.updateStep(3)"><span>MediumSized</span></step>
+			<step ng-click="ctrl.updateStep(4)"><span>Step4anotherlongone</span></step>
+<!-- 		<step ng-click="ctrl.updateStep(5)"><span>Step 5</span></step>
+			<step ng-click="ctrl.updateStep(6)"><span>Step 6</span></step>
+			<step ng-click="ctrl.updateStep(7)"><span>Step 7</span></step> -->
+		</my-steps>
+	</div>
+
+	<script type="text/ng-template" id="circles">
+		<div class="circle"></div>
+	</script>
+	
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="app/js.js"></script>
+</body>
+</html>
