@@ -5,28 +5,16 @@
 	<title>Testing Steps</title>
 	<style>
 		.container{
-			width:310px;
-			background:skyblue;
-			overflow:hidden;
+			position:relative;
 		}
 		step{
-			cursor:pointer;
-			position:relative;
-			padding:10px;
-			padding-top:50px; /* must be at least height of the circle */
-			text-align:center;
-			transition:all 550ms ease-in-out ;
-		}
-		my-steps{
-			display:flex;
-			justify-content:space-between;
-		}
-		.active .circle{
-			border:2px solid #BBCCBB;
-			background:#BBEEBB;
+			position:absolute;
+			top:120%;
+			background:red;
 		}
 		.circles{
-			display:inline-block;
+			display:flex;
+			justify-content:space-between;
 		}
 		.circle{
 			background:#EEE;
@@ -35,23 +23,20 @@
 			border-radius:50%;
 			box-sizing:border-box;
 			transition:all 100ms ease-in-out;
-			display:inline-block;
 		}
-		step:hover .circle{
-			background:#BBEEBB;
-			opacity:0.5;
+		.circle .active{
+			background:red;
 		}
-		.active:hover .circle{
-			opacity:1;
-		}
-		.collapsed span{;
+		.collapsed span{
 			display:none;
 		}
 		.collapsed{
-			width:50px;
+			
 		}
-		my-steps{
-			padding:10px;
+
+		.shortcuts{
+			height:500px;
+			padding-top:500px;
 		}
 
 	</style>
@@ -59,16 +44,18 @@
 <body ng-controller="myController as ctrl">
 	<div class="container">
 		<my-steps active-step="{{ ctrl.activeStep }}">
-			<step ng-click="ctrl.updateStep(1)"><span>Step1Thisisalongone</span></step>
-			<step ng-click="ctrl.updateStep(2)"><span>Step 2</span></step>
-			<step ng-click="ctrl.updateStep(3)"><span>MediumSized</span></step>
-			<step ng-click="ctrl.updateStep(4)"><span>Step4anotherlongone</span></step>
-<!-- 		<step ng-click="ctrl.updateStep(5)"><span>Step 5</span></step>
-			<step ng-click="ctrl.updateStep(6)"><span>Step 6</span></step>
-			<step ng-click="ctrl.updateStep(7)"><span>Step 7</span></step> -->
+			<step><span>Step1Thisisalongone</span></step>
+			<step><span>Step 2</span></step>
+			<step><span>MediumSized</span></step>
+			<step><span>Step4anotherlongone</span></step>
 		</my-steps>
 	</div>
-
+	<div class="shortcuts">
+		<b ng-click="ctrl.updateStep(1)">Test</b>
+		<b ng-click="ctrl.updateStep(2)">Test</b>
+		<b ng-click="ctrl.updateStep(3)">Test</b>
+		<b ng-click="ctrl.updateStep(4)">Test</b>
+	</div>
 	<script type="text/ng-template" id="circles">
 		<div class="circle"></div>
 	</script>
