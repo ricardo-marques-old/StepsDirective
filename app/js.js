@@ -15,13 +15,14 @@
             link: function(scope,elem,attrs){
 
             //CONFIG -------------------------------
-            var minimumPaddingBetweenSteps = 0,    // ensures that labels will be at least X pixels apart
+
+            var minimumPaddingBetweenSteps = 0,     // ensures that labels will be at least X pixels apart
                 circleDiameter = 30,                // 
                 circleBorderRadius = "50%",         // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
                 barHeight = 5,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
-                barFillColor = "orange",            // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
-                barFillPadding = 0,                 // Padding between bar and its fill
-                sequential;                         // if this is true, the steps before the current step will remain active (circles filled)
+                barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
+                barFillPadding = 0;                 // Padding between bar and its fill
+
             //END CONFIG ---------------------------
 
 
@@ -34,12 +35,15 @@
                 $barFill,
                 parentWidth,
                 width,
-                widthOfChildren = 0,
                 numberOfSteps = $steps.length,
                 template = '<div class="circle"></div>',
                 currentStep = attrs.activeStep,
-                collapsedMode = false;
+                collapsedMode = false,
+                sequential,
+                clickable;
 
+
+                //check attributes
                 if(attrs.bar!==undefined){
                     var bar=true;
                     $mySteps.prepend('<div class="bar"></div>');
@@ -53,6 +57,13 @@
                 } 
 
                 attrs.sequential!==undefined ? sequential = true : sequential = false;
+
+                attrs.clickable!==undefined ? clickable = true : clickable = false;
+
+
+
+
+
                 //when the active-step attribute is updated this adds the class active to the step with index of updatedStep
             var updateStep = function(updatedStep){
                     $timeout(function(){
@@ -181,9 +192,20 @@
                     };
                 });
 
-                $('step').each(function(){
-                    widthOfChildren += $(this).outerWidth();
-                });
+                if(clickable){
+                    $circle.each(function(index){
+                        $(this)[0].style.cursor="pointer";
+                        $(this)[0].addEventListener("click",function(){
+                            updateStep(index+1);
+                        });
+                    });
+                    $steps.each(function(index){
+                        $(this)[0].style.cursor="pointer";
+                        $(this)[0].addEventListener("click",function(){
+                            updateStep(index+1);
+                        });
+                    });
+                }
             }
         }
     });

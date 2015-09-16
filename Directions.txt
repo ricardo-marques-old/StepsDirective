@@ -9,10 +9,10 @@ Usage:
 
 This is the markup - "sequential" being defined means that the circles behind the active one also remain active. 
 					 "bar" being defined means that you'll get a bar connecting the circles
+					 "clickable" enables the user to change steps by clicking on the label or circle. May be useful.
 
-
-	<my-steps active-step="{{ ctrl.activeStep }}" sequential bar> // {{ctrl.activeStep}} can be any variable you want. The first step will have number 1, not 0.
-		<div class="step-container"> // call this whatever you'd like
+	<my-steps active-step="{{ ctrl.activeStep }}" sequential bar clickable> // {{ctrl.activeStep}} can be any variable you want. The first step will have number 1, not 0.
+		<div> // call this whatever you'd like but needs to be here
 			<step><span>Step 1</span></step>
 			<step><span>Step 2</span></step>
 			<step><span>Step 3</span></step>
