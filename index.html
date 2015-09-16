@@ -6,20 +6,26 @@
 	<style>
 		html,body{
 			padding:0;
-			margin:5px;
+			margin:0px;
 		}
 		.container{
 			position:relative;
-			width:50%;
+			width:70%;
+			padding:10px;
 		}
 
-		step{	
+		my-steps{
+			position:relative;
+		}
+
+		step{
 			padding-top:10px;
 			color:#DDD;
 		}
 
 		step.active{
-			color:#444;
+			color:orange;
+			font-weight: bold;
 		}
 
 		step span{
@@ -29,11 +35,11 @@
 		.circles{
 			display:flex;
 			justify-content:space-between;
+			position:relative;
 		}
 
 		.circle{
 			background:#EEE;
-			box-sizing:border-box;
 			z-index:2;
 			position:relative;
 		}
@@ -97,9 +103,6 @@
 		<b ng-click="ctrl.updateStep(3)">Test 3</b>
 		<b ng-click="ctrl.updateStep(4)">Test 4</b>
 	</div>
-	<script type="text/ng-template" id="circles">
-		<div class="circle"></div>
-	</script>
 	
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
