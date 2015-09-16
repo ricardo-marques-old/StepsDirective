@@ -10,11 +10,20 @@
 		}
 		.container{
 			position:relative;
-			width:60%;
+			width:50%;
 		}
 
 		step{	
 			padding-top:10px;
+			color:#DDD;
+		}
+
+		step.active{
+			color:#444;
+		}
+
+		step span{
+			white-space: nowrap;
 		}
 
 		.circles{
@@ -25,7 +34,6 @@
 		.circle{
 			background:#EEE;
 			box-sizing:border-box;
-			transition:all 100ms ease-in-out;
 			z-index:2;
 			position:relative;
 		}
@@ -39,7 +47,7 @@
 			right:5px;
 			border-radius:50%;
 			z-index:3;
-			background:lightgreen;
+			background:orange;
 		}
 
 		.collapsed span{
@@ -61,39 +69,33 @@
 			z-index:1;
 		}
 
-		.bar:before{
-			content:'';
-			background:lightgreen;
-			position:absolute;
-			left:0;
-			right:100%;
-			top:3px;
-			bottom:3px;
+		.bar-fill{
 			transition:all 200ms ease-in-out;
 		}
 
 		.shortcuts *{
-			cursor:pointer
+			cursor:pointer;
+			margin:20px;
 		}
 
 	</style>
 </head>
 <body ng-controller="myController as ctrl">
 	<div class="container">
-		<my-steps active-step="{{ ctrl.activeStep }}" bar>
+		<my-steps active-step="{{ ctrl.activeStep }}" sequential bar>
 			<div class="step-container">
 				<step><span>Step 1</span></step>
-				<step><span>Step 2</span></step>
+				<step><span>Step 2 This one's longer</span></step>
 				<step><span>Step 3</span></step>
 				<step><span>Step 4</span></step>
 			</div>
 		</my-steps>
 	</div>
 	<div class="shortcuts">
-		<b ng-click="ctrl.updateStep(1)">Test</b>
-		<b ng-click="ctrl.updateStep(2)">Test</b>
-		<b ng-click="ctrl.updateStep(3)">Test</b>
-		<b ng-click="ctrl.updateStep(4)">Test</b>
+		<b ng-click="ctrl.updateStep(1)">Test 1</b>
+		<b ng-click="ctrl.updateStep(2)">Test 2</b>
+		<b ng-click="ctrl.updateStep(3)">Test 3</b>
+		<b ng-click="ctrl.updateStep(4)">Test 4</b>
 	</div>
 	<script type="text/ng-template" id="circles">
 		<div class="circle"></div>

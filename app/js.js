@@ -17,10 +17,10 @@
                 var minimumPaddingBetweenSteps = 0,
                     circleDiameter = 30,
                     circleBorderRadius = 50, // Leave at 50 for circle, 0 for square
-                    barHeight = circleDiameter/3, // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
-                    bar;
-
-
+                    barHeight = 5, // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
+                    barFillColor = "orange",
+                    barFillPadding = 0,
+                    sequential;  // if this is true, the steps before the current step will remain active (circles filled)
 
                 var $mySteps = elem,
                     $parent = $mySteps.parent()[0],
@@ -28,6 +28,7 @@
                     $circles, //just initializing, gets defined in createCircles()
                     $circle,  //^same
                     $bar,     //defined in render()
+                    $barFill,
                     parentWidth = $parent.offsetWidth,
                     widthOfChildren = 0,
                     numberOfSteps = $steps.length,
@@ -36,24 +37,46 @@
                     collapsedMode = false;
 
                     if(attrs.bar!==undefined){
-                        bar=true;
+                        var bar=true;
                         $mySteps.prepend('<div class="bar"></div>');
                         $bar=$('.bar');
+                        console.log($bar);
+                        $bar[0].innerHTML='<div class="bar-fill"></div>';
+                        $barFill=$('.bar-fill');
                     } 
-                    else( bar=false )
+                    else{
+                        var bar=false;
+                    } 
+
+                    attrs.sequential!==undefined ? sequential = true : sequential = false;
                     //when the active-step attribute is updated this adds the class active to the step with index of updatedStep
                 var updateStep = function(updatedStep){
                         $timeout(function(){
                             var $circles=$('.circle');
                             if(updatedStep >= 0 && updatedStep <= numberOfSteps){ //make sure it's a valid step number
                                 $steps.removeClass('active').eq(updatedStep-1).addClass('active');
-                                $circles.removeClass('active').eq(updatedStep-1).addClass('active');
+                                if(sequential){
+                                    $circle.each(function(index){
+                                        if(index<=updatedStep-1){
+                                            $(this)[0].className="circle active";
+                                        }
+                                        else{
+                                            $(this)[0].className="circle";
+                                        }
+                                    })
+                                }
+                                else{
+                                    $circle.eq(updatedStep-1).addClass('active').siblings().removeClass('active');
+                                }
                                 if(collapsedMode){
                                     collapseOtherSteps(updatedStep-1);
                                 }   
                             }
                             else{
                                 $steps.removeClass('active');
+                            }
+                            if(bar){
+                                $barFill[0].style.right = ((100/(numberOfSteps-1))*(numberOfSteps-updatedStep))+"%";            
                             }
                         })   
                     },
@@ -78,7 +101,7 @@
                             else( $(this).removeClass('collapsed') )
                         })
                     },
-                    //gets the widdest step so we can set the height and width of all the steps to be equal
+                    //gets the widdest step (used in render to check if we need to collapse)
                     getWiddestStep = function(){
                         var widdest=0;
                         $steps.each(function(){
@@ -88,6 +111,7 @@
                         });
                         return widdest;
                     },
+                    //positions the step labels relatively to the circles, ensuring perfect alignment
                     setStepsPosition = function(){
                         $steps.each(function(index){
                             $(this)[0].style.position = "absolute";
@@ -128,21 +152,20 @@
                                 $bar[0].style.height = barHeight+"px";
                                 $bar[0].style.position = "absolute";
                                 $bar[0].style.transform = "translate(0,-50%)";
+
+                                $barFill[0].style.bottom = $barFill[0].style.left = $barFill[0].style.top = barFillPadding + "px";
+                                $barFill[0].style.position = "absolute";
+                                $barFill[0].style.background = barFillColor;
                             }
-                            //render circle fill
-                            console.log($('.circle.active::before'));
+
                         });
-                    },
-                    containerResize = function(){
-                        $timeout(function(){
-                            window.onresize=function(){
-                                console.log('resizing');
-                                render();
-                            };
-                        })
-                    }();
+                    };
                 
                 render();
+                window.onresize=function(){
+                    console.log('resizing');
+                    render();
+                };
                 //watches the active-step attribute on the my-steps element and applies the active class to a new step
                 attrs.$observe('activeStep',function(updatedStep){
                     updateStep(updatedStep);
