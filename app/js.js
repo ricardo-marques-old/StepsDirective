@@ -9,29 +9,46 @@
             this.activeStep = newStep;
         }
     }])
-    .directive('mySteps',function($timeout,$interval){
+    .directive('mySteps',function($timeout){
         return{
             restrict: 'E',
             link: function(scope,elem,attrs){
+                //CONFIG
+                var minimumPaddingBetweenSteps = 0,
+                    circleDiameter = 30,
+                    circleBorderRadius = 50, // Leave at 50 for circle, 0 for square
+                    barHeight = circleDiameter/3, // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
+                    bar;
+
+
+
                 var $mySteps = elem,
                     $parent = $mySteps.parent()[0],
                     $steps = $('step'),
+                    $circles, //just initializing, gets defined in createCircles()
+                    $circle,  //^same
+                    $bar,     //defined in render()
                     parentWidth = $parent.offsetWidth,
                     widthOfChildren = 0,
                     numberOfSteps = $steps.length,
                     template = $('#circles')[0].innerHTML,
                     currentStep = attrs.activeStep,
-                    collapsedMode = false,
+                    collapsedMode = false;
+
+                    if(attrs.bar!==undefined){
+                        bar=true;
+                        $mySteps.prepend('<div class="bar"></div>');
+                        $bar=$('.bar');
+                    } 
+                    else( bar=false )
                     //when the active-step attribute is updated this adds the class active to the step with index of updatedStep
-                    updateStep = function(updatedStep){
-                        console.log(collapsedMode);
+                var updateStep = function(updatedStep){
                         $timeout(function(){
                             var $circles=$('.circle');
                             if(updatedStep >= 0 && updatedStep <= numberOfSteps){ //make sure it's a valid step number
-                                // $steps.removeClass('active').eq(updatedStep-1).addClass('active');
+                                $steps.removeClass('active').eq(updatedStep-1).addClass('active');
                                 $circles.removeClass('active').eq(updatedStep-1).addClass('active');
                                 if(collapsedMode){
-                                    console.log('collapse');
                                     collapseOtherSteps(updatedStep-1);
                                 }   
                             }
@@ -42,8 +59,14 @@
                     },
                     createCircles = function(){
                         $mySteps.prepend('<div class="circles"></div>');
-                        var $circles=$('.circles')[0];
+                        $circles=$('.circles')[0];
                         $circles.innerHTML=template.repeat(numberOfSteps);
+                        $circle=$('.circle');
+                        $circle.each(function(){
+                            $(this)[0].style.height = $(this)[0].style.width = circleDiameter+"px";
+                            $(this)[0].style.borderRadius = circleBorderRadius+"%";
+
+                        })
                         updateStep(currentStep);
                     }(),
                     // collapses every step except the nth one
@@ -65,23 +88,61 @@
                         });
                         return widdest;
                     },
+                    setStepsPosition = function(){
+                        $steps.each(function(index){
+                            $(this)[0].style.position = "absolute";
+                            if(index !== 0 && index!==numberOfSteps-1){
+                                $(this)[0].style.left = ($circle[index].offsetLeft+(circleDiameter/2))+"px";
+                                $(this)[0].style.transform = "translate(-50%,0)";
+                            }
+                            else if(index===numberOfSteps-1){
+                                $(this)[0].style.right = "0px";
+                            }
+                        })
+                    },
                     // if the widdest step is widder than the width of the container/(numberofsteps-1) then it goes into collapsed mode
                     // else it makes every step the width of the widdest (this ensures that there is correct spacing between circles)
                     // this needs to be called when the window is resized 
-                    setStepsWidth = function(){
-                        var width=getWiddestStep();
-                        if( width <= (parentWidth / (numberOfSteps-1)) ){
-                            $steps.each(function(index){
-                                $(this).css('width',width);
-                            })  
-                        }
-                        else {
-                            collapsedMode=true;
-                            collapseOtherSteps(currentStep-1);
-                        }
+                    render = function(){
+                        $timeout(function(){
+                            var width=getWiddestStep();
+                            //Next if makes sure that there's enough room to equally space the circles and labels
+                            //also adds the minimum padding
+                            if( (width*numberOfSteps)+(minimumPaddingBetweenSteps*(numberOfSteps-1)) <= parentWidth) {
+                                //UNCOLLAPSED VIEW  
+                                //every step except for the first and last gets a left coordinate equal to it's circle+(half of circle) and translatde to left -50%
+                                collapsedMode=false;
+                                console.log('Full size');
+                                setStepsPosition(collapsedMode);
+                            }
+                            else {
+                                //COLLAPSED VIEW
+                                collapsedMode=true;
+                                console.log('Collapsed');
+                                collapseOtherSteps(currentStep-1);
+                                setStepsPosition(collapsedMode);
+                            }
+                            //renders the bar
+                            if(bar){
+                                $bar[0].style.right = $bar[0].style.left = $bar[0].style.top = circleDiameter/2+"px";
+                                $bar[0].style.height = barHeight+"px";
+                                $bar[0].style.position = "absolute";
+                                $bar[0].style.transform = "translate(0,-50%)";
+                            }
+                            //render circle fill
+                            console.log($('.circle.active::before'));
+                        });
+                    },
+                    containerResize = function(){
+                        $timeout(function(){
+                            window.onresize=function(){
+                                console.log('resizing');
+                                render();
+                            };
+                        })
                     }();
                 
-              
+                render();
                 //watches the active-step attribute on the my-steps element and applies the active class to a new step
                 attrs.$observe('activeStep',function(updatedStep){
                     updateStep(updatedStep);
@@ -97,7 +158,7 @@
         }
     });
     
-    
+    //repeat polyfill
     if (!String.prototype.repeat) {
       String.prototype.repeat = function(count) {
         'use strict';

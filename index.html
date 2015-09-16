@@ -4,32 +4,49 @@
 	<meta charset="UTF-8">
 	<title>Testing Steps</title>
 	<style>
+		html,body{
+			padding:0;
+			margin:5px;
+		}
 		.container{
 			position:relative;
+			width:60%;
 		}
-		step{
-			position:absolute;
-			top:120%;
-			background:red;
+
+		step{	
+			padding-top:10px;
 		}
+
 		.circles{
 			display:flex;
 			justify-content:space-between;
 		}
+
 		.circle{
 			background:#EEE;
-			width:30px;
-			height:30px;
-			border-radius:50%;
 			box-sizing:border-box;
 			transition:all 100ms ease-in-out;
+			z-index:2;
+			position:relative;
 		}
-		.circle .active{
-			background:red;
+
+		.circle.active:before{
+			content:'';
+			position:absolute;
+			top:5px;
+			left:5px;
+			bottom:5px;
+			right:5px;
+			border-radius:50%;
+			z-index:3;
+			background:lightgreen;
 		}
+
 		.collapsed span{
-			display:none;
+			
 		}
+
+
 		.collapsed{
 			
 		}
@@ -39,15 +56,37 @@
 			padding-top:500px;
 		}
 
+		.bar{
+			background:#EEE;
+			z-index:1;
+		}
+
+		.bar:before{
+			content:'';
+			background:lightgreen;
+			position:absolute;
+			left:0;
+			right:100%;
+			top:3px;
+			bottom:3px;
+			transition:all 200ms ease-in-out;
+		}
+
+		.shortcuts *{
+			cursor:pointer
+		}
+
 	</style>
 </head>
 <body ng-controller="myController as ctrl">
 	<div class="container">
-		<my-steps active-step="{{ ctrl.activeStep }}">
-			<step><span>Step1Thisisalongone</span></step>
-			<step><span>Step 2</span></step>
-			<step><span>MediumSized</span></step>
-			<step><span>Step4anotherlongone</span></step>
+		<my-steps active-step="{{ ctrl.activeStep }}" bar>
+			<div class="step-container">
+				<step><span>Step 1</span></step>
+				<step><span>Step 2</span></step>
+				<step><span>Step 3</span></step>
+				<step><span>Step 4</span></step>
+			</div>
 		</my-steps>
 	</div>
 	<div class="shortcuts">
