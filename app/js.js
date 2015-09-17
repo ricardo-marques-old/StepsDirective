@@ -99,16 +99,13 @@
                     $circle.each(function(){
                         $(this)[0].style.height = $(this)[0].style.width = circleDiameter+"px";
                         $(this)[0].style.borderRadius = circleBorderRadius;
-
                     })
                     updateStep(currentStep);
                 }(),
                 // collapses every step except the nth one
                 collapseOtherSteps = function(nth){
                     $steps.each(function(index){
-                        
                             $(this).addClass('collapsed');
-                       
                       })
                 },
                 //gets the widdest step (used in render to check if we need to collapse)
@@ -127,19 +124,27 @@
                         $steps.each(function(index){
                             $(this)[0].style.position = "absolute";
                             if(index !== 0 && index!==numberOfSteps-1){
-                                $(this)[0].style.left = ($circle[index].offsetLeft+(circleDiameter/2))+"px";
-                                $(this)[0].style.transform = "translate(-50%,0)";
+                                console.log(((100/(numberOfSteps-1)) * (index)));
+                                $(this)[0].style.left = ((100/(numberOfSteps-1)) * (index)) + "%";
+                                $(this)[0].style.transform = "translate(-50%," + circleDiameter/2 + "px)";
+                                // $circle[index].style.left = ((100/(numberOfSteps-1)) * (index)) + "%";
+                                // $circle[index].style.transform = "translate(-50%,0)";
+                                
+                            }
+                            else if(index===0){
+                                $(this)[0].style.transform = "translate(0," + circleDiameter/2 + "px)";
                             }
                             else if(index===numberOfSteps-1){
                                 $(this)[0].style.left = "100%";
-                                $(this)[0].style.transform = "translate(-100%,0)";
+                                $(this)[0].style.transform = "translate(-100%," + circleDiameter/2 + "px)";
+                                // $circle[index].style.right = "0px";
                             }
                         })
                     }
                     else{
                         $steps.each(function(index){
                             $(this)[0].style.position = "absolute";
-                            if(($(this[0]).offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))){
+                            if((($(this[0]).offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==(0 || numberOfSteps-1))){
                                 $(this)[0].style.left=0;
                             }
                         })
