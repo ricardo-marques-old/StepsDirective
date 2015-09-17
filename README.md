@@ -9,9 +9,15 @@ Make sure you set position relative or absolute on my-steps or the bar will beha
 
 Usage:
 
+<<<<<<< HEAD
 "sequential" being defined means that the circles behind the active one also remain active. 
 "bar" being defined means that you'll get a bar connecting the circles
 "clickable" enables the user to change steps by clicking on the label or circle. May be useful.
+=======
+This is the markup - "sequential" being defined means that the circles behind the active one also remain active. 
+					 "bar" being defined means that you'll get a bar connecting the circles
+					 "clickable" enables the user to change steps by clicking on the label or circle. May be useful.
+>>>>>>> 36a7dd8a47272307dc2762ccf7c0cef1cbeb9f4d
 
 	<my-steps active-step="{{ ctrl.activeStep }}" sequential bar clickable> // {{ctrl.activeStep}} can be any variable you want. The first step will have number 1, not 0.
 		<div> // call this whatever you'd like but needs to be here
@@ -23,9 +29,15 @@ Usage:
 	</my-steps>
 
 
+<<<<<<< HEAD
 CSS RULES---------------------
 
 MANDATORY --------------------
+=======
+	CSS RULES---------------------
+
+	MANDATORY --------------------
+>>>>>>> 36a7dd8a47272307dc2762ccf7c0cef1cbeb9f4d
 
 		my-steps{
 			position:relative;
@@ -48,6 +60,10 @@ MANDATORY --------------------
 			z-index:1; // leave this
 		}
 
+<<<<<<< HEAD
+=======
+	---------// END MANDATORY ------
+>>>>>>> 36a7dd8a47272307dc2762ccf7c0cef1cbeb9f4d
 		
 	//Whatever color you put in here will be the color of labels that aren't active
 	step{
@@ -81,4 +97,8 @@ MANDATORY --------------------
 	//Other bar styling must be defined in the config part of the directive (near top)
 	.bar-fill{ 
 		transition:all 200ms ease-in-out; //optional
+<<<<<<< HEAD
 	}
+=======
+	}
+>>>>>>> 36a7dd8a47272307dc2762ccf7c0cef1cbeb9f4d
