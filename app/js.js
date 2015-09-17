@@ -3,20 +3,14 @@
     'use strict'
 
     angular.module('app', [])
-    .controller('myController',['$scope',function($scope){
-        this.activeStep = 1;
-        this.updateStep = function(newStep){
-            this.activeStep = newStep;
-        }
-    }])
-    .directive('mySteps',function($timeout){
+    .directive('steps',function($timeout){
         return{
             restrict: 'E',
             link: function(scope,elem,attrs){
 
             //CONFIG -------------------------------
 
-            var minimumPaddingBetweenSteps = 0,     // ensures that labels will be at least X pixels apart
+            var minimumPaddingBetweenSteps = 40,     // ensures that labels will be at least X pixels apart
                 circleDiameter = 30,                // 
                 circleBorderRadius = "50%",         // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
                 barHeight = 5,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
@@ -35,22 +29,24 @@
                 $barFill,
                 parentWidth,
                 width,
+                widdest,
                 numberOfSteps = $steps.length,
-                template = '<div class="circle"></div>',
+                template = '<div class="steps-circle"></div>',
                 currentStep = attrs.activeStep,
                 collapsedMode = false,
                 sequential,
-                clickable;
+                clickable,
+                noCollapse;
 
 
                 //check attributes
                 if(attrs.bar!==undefined){
                     var bar=true;
-                    $mySteps.prepend('<div class="bar"></div>');
-                    $bar=$('.bar');
+                    $mySteps.prepend('<div class="steps-bar"></div>');
+                    $bar=$('.steps-bar');
                     console.log($bar);
-                    $bar[0].innerHTML='<div class="bar-fill"></div>';
-                    $barFill=$('.bar-fill');
+                    $bar[0].innerHTML='<div class="steps-bar-fill"></div>';
+                    $barFill=$('.steps-bar-fill');
                 } 
                 else{
                     var bar=false;
@@ -60,23 +56,23 @@
 
                 attrs.clickable!==undefined ? clickable = true : clickable = false;
 
-
+                attrs.noCollapse!==undefined ? noCollapse = true : noCollapse = false;
+                //end attribute check
 
 
 
                 //when the active-step attribute is updated this adds the class active to the step with index of updatedStep
             var updateStep = function(updatedStep){
                     $timeout(function(){
-                        var $circles=$('.circle');
                         if(updatedStep >= 0 && updatedStep <= numberOfSteps){ //make sure it's a valid step number
                             $steps.removeClass('active').eq(updatedStep-1).addClass('active');
                             if(sequential){
                                 $circle.each(function(index){
                                     if(index<=updatedStep-1){
-                                        $(this)[0].className="circle active";
+                                        $(this)[0].className="steps-circle active";
                                     }
                                     else{
-                                        $(this)[0].className="circle";
+                                        $(this)[0].className="steps-circle";
                                     }
                                 })
                             }
@@ -96,10 +92,10 @@
                     })   
                 },
                 createCircles = function(){
-                    $mySteps.prepend('<div class="circles"></div>');
-                    $circles=$('.circles')[0];
+                    $mySteps.prepend('<div class="steps-circles"></div>');
+                    $circles=$('.steps-circles')[0];
                     $circles.innerHTML=template.repeat(numberOfSteps);
-                    $circle=$('.circle');
+                    $circle=$('.steps-circle');
                     $circle.each(function(){
                         $(this)[0].style.height = $(this)[0].style.width = circleDiameter+"px";
                         $(this)[0].style.borderRadius = circleBorderRadius;
@@ -110,15 +106,14 @@
                 // collapses every step except the nth one
                 collapseOtherSteps = function(nth){
                     $steps.each(function(index){
-                        if(index !== nth){
+                        
                             $(this).addClass('collapsed');
-                        }
-                        else( $(this).removeClass('collapsed') )
-                    })
+                       
+                      })
                 },
                 //gets the widdest step (used in render to check if we need to collapse)
                 getWiddestStep = function(){
-                    var widdest=0;
+                    widdest=0;
                     $steps.each(function(){
                         if($(this)[0].offsetWidth>= widdest){
                             widdest=$(this)[0].offsetWidth;
@@ -127,17 +122,28 @@
                     return widdest;
                 },
                 //positions the step labels relatively to the circles, ensuring perfect alignment
-                setStepsPosition = function(){
-                    $steps.each(function(index){
-                        $(this)[0].style.position = "absolute";
-                        if(index !== 0 && index!==numberOfSteps-1){
-                            $(this)[0].style.left = ($circle[index].offsetLeft+(circleDiameter/2))+"px";
-                            $(this)[0].style.transform = "translate(-50%,0)";
-                        }
-                        else if(index===numberOfSteps-1){
-                            $(this)[0].style.right = "0px";
-                        }
-                    })
+                setStepsPosition = function(collapsedMode){
+                    if(collapsedMode===false){
+                        $steps.each(function(index){
+                            $(this)[0].style.position = "absolute";
+                            if(index !== 0 && index!==numberOfSteps-1){
+                                $(this)[0].style.left = ($circle[index].offsetLeft+(circleDiameter/2))+"px";
+                                $(this)[0].style.transform = "translate(-50%,0)";
+                            }
+                            else if(index===numberOfSteps-1){
+                                $(this)[0].style.left = "100%";
+                                $(this)[0].style.transform = "translate(-100%,0)";
+                            }
+                        })
+                    }
+                    else{
+                        $steps.each(function(index){
+                            $(this)[0].style.position = "absolute";
+                            if(($(this[0]).offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))){
+                                $(this)[0].style.left=0;
+                            }
+                        })
+                    }
                 },
                 // if the widdest step is widder than the width of the container/(numberofsteps-1) then it goes into collapsed mode
                 // else it makes every step the width of the widdest (this ensures that there is correct spacing between circles)
@@ -147,20 +153,20 @@
                         parentWidth=$parent.offsetWidth;
                         width=getWiddestStep();
                         console.log(width);
-                        //Next if makes sure that there's enough room to equally space the circles and labels
+                        //Next it makes sure that there's enough room to equally space the circles and labels
                         //also adds the minimum padding
                         console.log(parentWidth);
-                        if( ((width*numberOfSteps)+((minimumPaddingBetweenSteps*(numberOfSteps-1)))) <= parentWidth) {
+                        if( (((width*numberOfSteps)+((minimumPaddingBetweenSteps*(numberOfSteps-1)))) <= parentWidth) || noCollapse) {
                             //UNCOLLAPSED VIEW  
                             //every step except for the first and last gets a left coordinate equal to it's circle+(half of circle) and translatde to left -50%
-                            collapsedMode=false;
                             console.log('Full size');
+                            collapsedMode=false;
                             setStepsPosition(collapsedMode);
                         }
                         else {
                             //COLLAPSED VIEW
-                            collapsedMode=true;
                             console.log('Collapsed');
+                            collapsedMode=true;
                             collapseOtherSteps(currentStep-1);
                             setStepsPosition(collapsedMode);
                         }
@@ -192,6 +198,7 @@
                     };
                 });
 
+                //if the clickable attribute is present
                 if(clickable){
                     $circle.each(function(index){
                         $(this)[0].style.cursor="pointer";
