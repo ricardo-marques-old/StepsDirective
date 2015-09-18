@@ -1,5 +1,5 @@
 Angular directive to create a responsive steps section
-
+![screenshot](https://github.com/RicardoAlmeidaMarques/StepsDirective/blob/master/screen.png?raw=true "screenie")
 ## Warnings
 
 * The labels are positioned absolutely, so make sure they're not overflowing onto the div below.	Adding some padding to the bottom of the container fixes it. (I didn't add it because it depends on the size of font you're using).
