@@ -15,13 +15,15 @@ Angular directive to create a responsive steps section
 3. Include steps.js in your html file, after angular. 
 	<script src="steps.js"></script>
 4. Use this markup
-	<steps active-step="1" sequential bar clickable ng-app="steps">
-		<div>
-			<step><span>1. Think</span></step>
-			<step><span>2. Code</span></step>
-			<step><span>3. Fix</span></step>
-		</div>
-	</steps>
+```html
+<steps active-step="1" sequential bar clickable ng-app="steps">
+	<div>
+		<step><span>1. Think</span></step>
+		<step><span>2. Code</span></step>
+		<step><span>3. Fix</span></step>
+	</div>
+</steps>
+```
 5. Style to taste. If you want to add padding to the sides, simply wrap the steps element within a container and add padding to it. Before changing the CSS make sure what you're trying to change isn't withing the CONFIG comment within the steps.js file.
 6. You're done, go grab a cup of coffee and rejoyce in the millions of dollars you will make from your snazzy website (results not guaranteed).
 
