@@ -23,7 +23,7 @@ Angular directive to create a responsive steps section
 			<step><span>3. Fix</span></step>
 		</div>
 	</steps>
-   ```
+   ```⋅⋅⋅
 5. Style to taste. If you want to add padding to the sides, simply wrap the steps element within a container and add padding to it. Before changing the CSS make sure what you're trying to change isn't withing the CONFIG comment within the steps.js file.
 6. You're done, go grab a cup of coffee and rejoyce in the millions of dollars you will make from your snazzy website (results not guaranteed).
 
