@@ -12,9 +12,9 @@ Angular directive to create a responsive steps section
 
 1. Make sure to include [jquery](https://jquery.com/) and [angular](https://angularjs.org/) in your website (jquery must be called first).
 2. Include steps.css in your header file.
-3. Include steps.js in your html file, after angular. 
-	<script src="steps.js"></script>
-4. Use this markup
+3. Include steps.js in your html file, after angular. `<script src="steps.js"></script>`
+4. Use this markup. If you run into any problems, just wrap steps with a container div and add position:relative or absolute to that div.
+	
 	```html
 		<steps active-step="1" sequential bar clickable ng-app="steps">
 			<div>
