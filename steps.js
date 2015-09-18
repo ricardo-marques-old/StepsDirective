@@ -2,7 +2,7 @@
 
     'use strict'
 
-    angular.module('app', [])
+    angular.module('steps', [])
     .directive('steps',function($timeout){
         return{
             restrict: 'E',
@@ -10,10 +10,10 @@
 
             //CONFIG -------------------------------
 
-            var minimumPaddingBetweenSteps = 40,     // ensures that labels will be at least X pixels apart
-                circleDiameter = 30,                // 
+            var minimumPaddingBetweenSteps = 0,     // ensures that labels will be at least X pixels apart
+                circleDiameter = 25,                // 
                 circleBorderRadius = "50%",         // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
-                barHeight = 5,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
+                barHeight = 3,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
                 barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
                 barFillPadding = 0;                 // Padding between bar and its fill
 
@@ -33,7 +33,7 @@
                 numberOfSteps = $steps.length,
                 template = '<div class="steps-circle"></div>',
                 currentStep = attrs.activeStep,
-                collapsedMode = false,
+                collapsedMode = true,
                 sequential,
                 clickable,
                 noCollapse;
@@ -79,9 +79,6 @@
                             else{
                                 $circle.eq(updatedStep-1).addClass('active').siblings().removeClass('active');
                             }
-                            if(collapsedMode){
-                                collapseOtherSteps(updatedStep-1);
-                            }   
                         }
                         else{
                             $steps.removeClass('active');
@@ -102,11 +99,19 @@
                     })
                     updateStep(currentStep);
                 }(),
-                // collapses every step except the nth one
-                collapseOtherSteps = function(nth){
-                    $steps.each(function(index){
-                            $(this).addClass('collapsed');
-                      })
+                // collapses the steps
+                collapseSteps = function(){
+                    console.log('collapsing');
+                    $steps.each(function(){
+                        $(this).addClass('collapsed');
+                    })
+                },
+                uncollapseSteps = function(){
+                    console.log('uncollapsing')
+                    $steps.each(function(){
+                        console.log($(this));
+                        $(this).removeClass('collapsed');
+                    })
                 },
                 //gets the widdest step (used in render to check if we need to collapse)
                 getWiddestStep = function(){
@@ -122,30 +127,45 @@
                 setStepsPosition = function(collapsedMode){
                     if(collapsedMode===false){
                         $steps.each(function(index){
-                            $(this)[0].style.position = "absolute";
                             if(index !== 0 && index!==numberOfSteps-1){
-                                console.log(((100/(numberOfSteps-1)) * (index)));
-                                $(this)[0].style.left = ((100/(numberOfSteps-1)) * (index)) + "%";
-                                $(this)[0].style.transform = "translate(-50%," + circleDiameter/2 + "px)";
-                                // $circle[index].style.left = ((100/(numberOfSteps-1)) * (index)) + "%";
-                                // $circle[index].style.transform = "translate(-50%,0)";
+                                $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
+                                $(this)[0].style.transform = "translate(-50%,0)";
                                 
-                            }
-                            else if(index===0){
-                                $(this)[0].style.transform = "translate(0," + circleDiameter/2 + "px)";
                             }
                             else if(index===numberOfSteps-1){
                                 $(this)[0].style.left = "100%";
-                                $(this)[0].style.transform = "translate(-100%," + circleDiameter/2 + "px)";
-                                // $circle[index].style.right = "0px";
+                                $(this)[0].style.transform = "translate(-100%,0)";
                             }
                         })
                     }
                     else{
                         $steps.each(function(index){
-                            $(this)[0].style.position = "absolute";
-                            if((($(this[0]).offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==(0 || numberOfSteps-1))){
-                                $(this)[0].style.left=0;
+                            //if the step can't fit if it's centered with its circle then it will be aligned to whatever side the circle is closest to
+                            if((($(this)[0].offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==0 && index!==numberOfSteps-1 && index>((numberOfSteps/2)-1))){
+                                // console.log('hi');
+                                // if(index<((numberOfSteps/2))){
+                                //     console.log('!');
+                                //     $(this)[0].style.left=0 + "px";
+                                //     $(this)[0].style.transform = "translate(0,0)";
+                                // }
+                                // else{
+                                    $(this)[0].style.left=100 + "%";
+                                    $(this)[0].style.transform = "translate(-100%,0)";
+                                // }
+                            }
+                            else if( $(this)[0].offsetWidth/2 > ($circle[index].offsetLeft+(circleDiameter/2))   && (index!==0 || index!==numberOfSteps-1)){
+                                $(this)[0].style.left=0 + "px";
+                                $(this)[0].style.transform = "translate(0,0)";
+                            }
+                            else{
+                                if(index !== 0 && index!==numberOfSteps-1){
+                                    $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
+                                    $(this)[0].style.transform = "translate(-50%,0)";
+                                }
+                                else if(index===numberOfSteps-1){
+                                    $(this)[0].style.left = "100%";
+                                    $(this)[0].style.transform = "translate(-100%,0)";
+                                }
                             }
                         })
                     }
@@ -157,23 +177,21 @@
                     $timeout(function(){
                         parentWidth=$parent.offsetWidth;
                         width=getWiddestStep();
-                        console.log(width);
+                        console.log(width*numberOfSteps,parentWidth);
                         //Next it makes sure that there's enough room to equally space the circles and labels
                         //also adds the minimum padding
-                        console.log(parentWidth);
-                        if( (((width*numberOfSteps)+((minimumPaddingBetweenSteps*(numberOfSteps-1)))) <= parentWidth) || noCollapse) {
+                        if((((width*numberOfSteps)+(((minimumPaddingBetweenSteps + circleDiameter*1.8)*(numberOfSteps-1)))) <= parentWidth) || noCollapse) {
                             //UNCOLLAPSED VIEW  
                             //every step except for the first and last gets a left coordinate equal to it's circle+(half of circle) and translatde to left -50%
                             console.log('Full size');
-                            collapsedMode=false;
-                            setStepsPosition(collapsedMode);
+                            setStepsPosition(!collapsedMode);
+                            uncollapseSteps();
                         }
                         else {
                             //COLLAPSED VIEW
                             console.log('Collapsed');
-                            collapsedMode=true;
-                            collapseOtherSteps(currentStep-1);
                             setStepsPosition(collapsedMode);
+                            collapseSteps();
                         }
                         //renders the bar and its fill
                         if(bar){
@@ -190,6 +208,9 @@
                     });
                 };
             
+                $steps.each(function(){
+                    $(this)[0].style.position = "absolute";
+                });
                 render();
                 window.onresize=function(){
                     console.log('resizing');
@@ -198,9 +219,6 @@
                 //watches the active-step attribute on the my-steps element and applies the active class to a new step
                 attrs.$observe('activeStep',function(updatedStep){
                     updateStep(updatedStep);
-                    if(collapsedMode){
-                        collapseOtherSteps(updatedStep-1)
-                    };
                 });
 
                 //if the clickable attribute is present
