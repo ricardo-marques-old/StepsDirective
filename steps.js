@@ -44,7 +44,6 @@
                     var bar=true;
                     $mySteps.prepend('<div class="steps-bar"></div>');
                     $bar=$('.steps-bar');
-                    console.log($bar);
                     $bar[0].innerHTML='<div class="steps-bar-fill"></div>';
                     $barFill=$('.steps-bar-fill');
                 } 
@@ -101,15 +100,12 @@
                 }(),
                 // collapses the steps
                 collapseSteps = function(){
-                    console.log('collapsing');
                     $steps.each(function(){
                         $(this).addClass('collapsed');
                     })
                 },
                 uncollapseSteps = function(){
-                    console.log('uncollapsing')
                     $steps.each(function(){
-                        console.log($(this));
                         $(this).removeClass('collapsed');
                     })
                 },
@@ -130,11 +126,12 @@
                             if(index !== 0 && index!==numberOfSteps-1){
                                 $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
                                 $(this)[0].style.transform = "translate(-50%,0)";
-                                
+                                $(this)[0].style.webkitTransform = "translate(-50%,0)";
                             }
                             else if(index===numberOfSteps-1){
                                 $(this)[0].style.left = "100%";
                                 $(this)[0].style.transform = "translate(-100%,0)";
+                                $(this)[0].style.webkitTransform = "translate(-100%,0)";
                             }
                         })
                     }
@@ -142,29 +139,25 @@
                         $steps.each(function(index){
                             //if the step can't fit if it's centered with its circle then it will be aligned to whatever side the circle is closest to
                             if((($(this)[0].offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==0 && index!==numberOfSteps-1 && index>((numberOfSteps/2)-1))){
-                                // console.log('hi');
-                                // if(index<((numberOfSteps/2))){
-                                //     console.log('!');
-                                //     $(this)[0].style.left=0 + "px";
-                                //     $(this)[0].style.transform = "translate(0,0)";
-                                // }
-                                // else{
-                                    $(this)[0].style.left=100 + "%";
-                                    $(this)[0].style.transform = "translate(-100%,0)";
-                                // }
+                                $(this)[0].style.left=100 + "%";
+                                $(this)[0].style.transform = "translate(-100%,0)";
+                                $(this)[0].style.webkitTransform = "translate(-100%,0)";
                             }
                             else if( $(this)[0].offsetWidth/2 > ($circle[index].offsetLeft+(circleDiameter/2))   && (index!==0 || index!==numberOfSteps-1)){
                                 $(this)[0].style.left=0 + "px";
                                 $(this)[0].style.transform = "translate(0,0)";
+                                $(this)[0].style.webkitTransform = "translate(0,0)";
                             }
                             else{
                                 if(index !== 0 && index!==numberOfSteps-1){
                                     $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
                                     $(this)[0].style.transform = "translate(-50%,0)";
+                                    $(this)[0].style.webkitTransform = "translate(-50%,0)";
                                 }
                                 else if(index===numberOfSteps-1){
                                     $(this)[0].style.left = "100%";
                                     $(this)[0].style.transform = "translate(-100%,0)";
+                                    $(this)[0].style.webkitTransform = "translate(-100%,0)";
                                 }
                             }
                         })
@@ -177,19 +170,16 @@
                     $timeout(function(){
                         parentWidth=$parent.offsetWidth;
                         width=getWiddestStep();
-                        console.log(width*numberOfSteps,parentWidth);
                         //Next it makes sure that there's enough room to equally space the circles and labels
                         //also adds the minimum padding
                         if((((width*numberOfSteps)+(((minimumPaddingBetweenSteps + circleDiameter*1.8)*(numberOfSteps-1)))) <= parentWidth) || noCollapse) {
                             //UNCOLLAPSED VIEW  
                             //every step except for the first and last gets a left coordinate equal to it's circle+(half of circle) and translatde to left -50%
-                            console.log('Full size');
                             setStepsPosition(!collapsedMode);
                             uncollapseSteps();
                         }
                         else {
                             //COLLAPSED VIEW
-                            console.log('Collapsed');
                             setStepsPosition(collapsedMode);
                             collapseSteps();
                         }
@@ -199,6 +189,7 @@
                             $bar[0].style.height = barHeight+"px";
                             $bar[0].style.position = "absolute";
                             $bar[0].style.transform = "translate(0,-50%)";
+                            $bar[0].style.webkitTransform = "translate(0,-50%)";
 
                             $barFill[0].style.bottom = $barFill[0].style.left = $barFill[0].style.top = barFillPadding + "px";
                             $barFill[0].style.position = "absolute";
@@ -213,7 +204,6 @@
                 });
                 render();
                 window.onresize=function(){
-                    console.log('resizing');
                     render();
                 };
                 //watches the active-step attribute on the my-steps element and applies the active class to a new step
