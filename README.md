@@ -35,7 +35,7 @@ Angular directive to create a responsive steps section
                 circleDiameter = 20,                // 
                 circleBorderRadius= "50%",          // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
                 barHeight = 3,                      // Make sure to not set it to be bigger than the circle 
-                									   diameter, I recommend a max of circleDiameter/2
+                									// diameter, I recommend a max of circleDiameter/2
                 barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
                 barFillPadding = 0,                 // Padding between bar and its fill
                 stepsPadding = 20;                  // Padding between circle and labels
