@@ -3,22 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Testing Steps</title>
-	<link rel="stylesheet" type="text/css" href="steps.css"/>
+	<link rel="stylesheet" type="text/css" href="steps.min.css"/>
 </head>
 <body>
-<div class="container">
-	<steps active-step="1" sequential bar clickable ng-app="steps" ng-cloak>
-		<div>
-			<step><span>1. Think</span></step>
-			<step><span>2. Code</span></step>
-			<step><span>3. Fix</span></step>
-			<step><span>4. Fix</span></step>
-		</div>
-	</steps>
+	<div class="steps-container">
+		<steps active-step="1" sequential bar clickable ng-app="steps" ng-cloak>
+			<div>
+				<step><span>1. Think</span></step>
+				<step><span>2. Code</span></step>
+				<step><span>3. Fix</span></step>
+				<step><span>4. Fix</span></step>
+			</div>
+		</steps>
 	</div>
 
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
-	<script src="steps.js"></script>
+	<script src="steps.min.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
-.container{
+.steps-container{
 	position:relative;
-	width:400px;
+	width:50%;
 }
 
 steps{
@@ -9,7 +9,6 @@ steps{
 
 /*style of label when not active*/
 step{
-	padding-top:20px;
 	color:#DDD;
 }
 

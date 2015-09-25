@@ -3,7 +3,7 @@
     'use strict'
 
     angular.module('steps', [])
-    .directive('steps',function($timeout){
+    .directive('steps',['$timeout',function($timeout){
         return{
             restrict: 'E',
             link: function(scope,elem,attrs){
@@ -12,10 +12,11 @@
 
             var minimumPaddingBetweenSteps = 0,     // ensures that labels will be at least X pixels apart
                 circleDiameter = 20,                // 
-                circleBorderRadius= "50%",         // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
+                circleBorderRadius= "50%",          // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
                 barHeight = 3,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
                 barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
-                barFillPadding = 0;                 // Padding between bar and its fill
+                barFillPadding = 0,                 // Padding between bar and its fill
+                stepsPadding = 20;                  // Padding between circle and labels
 
             //END CONFIG ---------------------------
 
@@ -125,13 +126,18 @@
                         $steps.each(function(index){
                             if(index !== 0 && index!==numberOfSteps-1){
                                 $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
+                                $(this)[0].style.top = stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-50%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-50%,0)";
                             }
                             else if(index===numberOfSteps-1){
                                 $(this)[0].style.left = "100%";
+                                $(this)[0].style.top = stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-100%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-100%,0)";
+                            }
+                            else if(index ===0){
+                                $(this)[0].style.top = stepsPadding + "px";
                             }
                         })
                     }
@@ -140,24 +146,31 @@
                             //if the step can't fit if it's centered with its circle then it will be aligned to whatever side the circle is closest to
                             if((($(this)[0].offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==0 && index!==numberOfSteps-1 && index>((numberOfSteps/2)-1))){
                                 $(this)[0].style.left=100 + "%";
+                                $(this)[0].style.top = stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-100%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-100%,0)";
                             }
                             else if( $(this)[0].offsetWidth/2 > ($circle[index].offsetLeft+(circleDiameter/2))   && (index!==0 || index!==numberOfSteps-1)){
                                 $(this)[0].style.left=0 + "px";
+                                $(this)[0].style.top = stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(0,0)";
                                 $(this)[0].style.webkitTransform = "translate(0,0)";
                             }
                             else{
                                 if(index !== 0 && index!==numberOfSteps-1){
                                     $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
+                                    $(this)[0].style.top = stepsPadding + "px";
                                     $(this)[0].style.transform = "translate(-50%,0)";
                                     $(this)[0].style.webkitTransform = "translate(-50%,0)";
                                 }
                                 else if(index===numberOfSteps-1){
                                     $(this)[0].style.left = "100%";
+                                    $(this)[0].style.top = stepsPadding + "px";
                                     $(this)[0].style.transform = "translate(-100%,0)";
                                     $(this)[0].style.webkitTransform = "translate(-100%,0)";
+                                }
+                                else if(index ===0){
+                                    $(this)[0].style.top = stepsPadding + "px";
                                 }
                             }
                         })
@@ -228,7 +241,7 @@
                 }
             }
         }
-    });
+    }]);
     
     //repeat polyfill
     if (!String.prototype.repeat) {

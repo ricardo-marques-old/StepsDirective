@@ -2,9 +2,10 @@ Angular directive to create a responsive steps section
 ![screenshot](https://github.com/RicardoAlmeidaMarques/StepsDirective/blob/master/screen.png?raw=true "screenie")
 ## Warnings
 
-* The labels are positioned absolutely, so make sure they're not overflowing onto the div below.	Adding some padding to the bottom of the container fixes it. (I didn't add it because it depends on the size of font you're using).
+* The labels are positioned absolutely, so make sure they're not overflowing onto the div below. Adding some padding to the bottom of the container fixes it. (I didn't add it because it depends on the size of font you're using).
 * Make sure you set position relative or absolute on steps or the bar will behave weird.
 * Make sure the largest step fits within the container when it's the smallest size, the text does not wrap correctly currently.
+* This directive uses flexbox, so it [will only work on IE10 and above](http://caniuse.com/#search=flexbox).
 
 ## Usage
 
@@ -16,6 +17,7 @@ Angular directive to create a responsive steps section
 4. Use this markup. If you run into any problems, just wrap steps with a container div and add position:relative or absolute to that div.
 	
 	```html
+		// sequential bar and clickable are optional attributes, see below for more info. 
 		<steps active-step="1" sequential bar clickable ng-app="steps">
 			<div>
 				<step><span>1. Think</span></step>
