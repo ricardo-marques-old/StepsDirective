@@ -26,7 +26,24 @@ Angular directive to create a responsive steps section
 			</div>
 		</steps>
 	```
-5. Style to taste. If you want to add padding to the sides, simply wrap the steps element within a container and add padding to it. Before changing the CSS make sure what you're trying to change isn't withing the CONFIG comment within the steps.js file.
+5. Style to taste. But please, <b>before you add styles in css, make sure what you want to change isn't in the config section of the js file!</b>
+
+	```javascript
+		//CONFIG -------------------------------
+
+            var minimumPaddingBetweenSteps = 0,     // ensures that labels will be at least X pixels apart
+                circleDiameter = 20,                // 
+                circleBorderRadius= "50%",          // Leave at 50 for circle, 0 for square; feel free to also use px, just keep it in a string
+                barHeight = 3,                      // Make sure to not set it to be bigger than the circle 
+                									   diameter, I recommend a max of circleDiameter/2
+                barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
+                barFillPadding = 0,                 // Padding between bar and its fill
+                stepsPadding = 20;                  // Padding between circle and labels
+
+        //END CONFIG ---------------------------
+
+	````
+If you want to add padding to the sides, simply wrap the steps element within a container and add padding to it. Before changing the CSS make sure what you're trying to change isn't withing the CONFIG comment within the steps.js file.
 6. You're done, go grab a cup of coffee and rejoyce in the millions of dollars you will make from your snazzy website (results not guaranteed).
 
 ### Optional attributes
