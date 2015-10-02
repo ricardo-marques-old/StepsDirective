@@ -16,7 +16,7 @@
                 barHeight = 3,                      // Make sure to not set it to be bigger than the circle diameter, I recommend at max circleDiameter/2
                 barFillColor = "skyblue",           // Keep it in a string ex: "rgba(255,255,255,.3) , #333, etc."
                 barFillPadding = 0,                 // Padding between bar and its fill
-                stepsPadding = 20;                  // Padding between circle and labels
+                stepsPadding = 10;                  // Padding between circle and labels
 
             //END CONFIG ---------------------------
 
@@ -126,18 +126,18 @@
                         $steps.each(function(index){
                             if(index !== 0 && index!==numberOfSteps-1){
                                 $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
-                                $(this)[0].style.top = stepsPadding + "px";
+                                $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-50%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-50%,0)";
                             }
                             else if(index===numberOfSteps-1){
                                 $(this)[0].style.left = "100%";
-                                $(this)[0].style.top = stepsPadding + "px";
+                                $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-100%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-100%,0)";
                             }
                             else if(index ===0){
-                                $(this)[0].style.top = stepsPadding + "px";
+                                $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                             }
                         })
                     }
@@ -146,31 +146,31 @@
                             //if the step can't fit if it's centered with its circle then it will be aligned to whatever side the circle is closest to
                             if((($(this)[0].offsetWidth/2) > (parentWidth-($circle[index].offsetLeft+(circleDiameter/2)))) && (index!==0 && index!==numberOfSteps-1 && index>((numberOfSteps/2)-1))){
                                 $(this)[0].style.left=100 + "%";
-                                $(this)[0].style.top = stepsPadding + "px";
+                                $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(-100%,0)";
                                 $(this)[0].style.webkitTransform = "translate(-100%,0)";
                             }
                             else if( $(this)[0].offsetWidth/2 > ($circle[index].offsetLeft+(circleDiameter/2))   && (index!==0 || index!==numberOfSteps-1)){
                                 $(this)[0].style.left=0 + "px";
-                                $(this)[0].style.top = stepsPadding + "px";
+                                $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                 $(this)[0].style.transform = "translate(0,0)";
                                 $(this)[0].style.webkitTransform = "translate(0,0)";
                             }
                             else{
                                 if(index !== 0 && index!==numberOfSteps-1){
                                     $(this)[0].style.left = ($circle[index].offsetLeft + circleDiameter/2) + "px";
-                                    $(this)[0].style.top = stepsPadding + "px";
+                                    $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                     $(this)[0].style.transform = "translate(-50%,0)";
                                     $(this)[0].style.webkitTransform = "translate(-50%,0)";
                                 }
                                 else if(index===numberOfSteps-1){
                                     $(this)[0].style.left = "100%";
-                                    $(this)[0].style.top = stepsPadding + "px";
+                                    $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                     $(this)[0].style.transform = "translate(-100%,0)";
                                     $(this)[0].style.webkitTransform = "translate(-100%,0)";
                                 }
                                 else if(index ===0){
-                                    $(this)[0].style.top = stepsPadding + "px";
+                                    $(this)[0].style.top = circleDiameter + stepsPadding + "px";
                                 }
                             }
                         })

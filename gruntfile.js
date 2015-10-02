@@ -25,7 +25,6 @@ module.exports = function(grunt) {
             ]
         },
         options: {
-          watchTask: true,
           online: true,
           server:{
             baseDir: './'
