@@ -48,7 +48,7 @@ If you want to add padding to the sides, simply wrap the steps element within a 
 
 ### Optional attributes
 
-* "sequential" being defined means that the circles behind the active one also remain active. 
-* "bar" being defined means that you'll get a bar connecting the circles
+* "sequential" steps before the current step will remain active
+* "bar" creates bar connecting the circles
 * "clickable" enables the user to change steps by clicking on the label or circle. May be useful.
 * "no-collapse" disables collapsing of labels, use at own risk.
